@@ -42,9 +42,9 @@ If the issue started after recent code changes, review those changes. Use versio
 ```
 git log
 git diff [commit_hash]
-```
+
 
 ````
 git diff [commit_hash]
-```
+
 
