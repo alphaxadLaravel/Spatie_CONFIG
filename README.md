@@ -39,10 +39,12 @@ Inspect any error messages or warnings in the logs. Logs are typically located a
 
 If the issue started after recent code changes, review those changes. Use version control tools like Git to view commit history and changes made to relevant files.
 
-```bash
+```
 git log
 git diff [commit_hash]
+```
 
-```bash
-git log
+````
 git diff [commit_hash]
+```
+
