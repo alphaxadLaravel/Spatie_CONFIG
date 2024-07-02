@@ -207,6 +207,12 @@ class Permission extends SpatiePermission
 }
 ```
 
+## In Users Model
+```
+use HasFactory, Notifiable, HasRoles;
+
+```
+
 ## Permission File in Config
 ```
 <?php
