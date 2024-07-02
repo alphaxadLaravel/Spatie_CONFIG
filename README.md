@@ -9,8 +9,7 @@ composer require spatie/laravel-permission
 ```
 ## Vendor Publish
 ```
-php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider" --tag="migrations"
-php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider" --tag="config"
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
 ```
 ## Migrate Database
 ```
