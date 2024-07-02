@@ -276,3 +276,91 @@ return [
 ```
 https://spatie.be/docs/laravel-permission/v6/advanced-usage/uuid
 ```
+
+## Using Roles in Views
+```
+<!-- Check if the user has the 'Admin' role -->
+@role('Admin')
+    <p>This is visible to users with the Admin role.</p>
+@endrole
+
+<!-- Alias for @role('Admin') -->
+@hasrole('Admin')
+    <p>This is visible to users with the Admin role.</p>
+@endhasrole
+
+<!-- Check if the user has any of the given roles -->
+@hasanyrole('Admin|Manager')
+    <p>This is visible to users with either the Admin or Manager role.</p>
+@endhasanyrole
+
+<!-- Check if the user has all of the given roles -->
+@hasallroles('Admin|Manager')
+    <p>This is visible to users with both Admin and Manager roles.</p>
+@endhasallroles
+
+<!-- Check if the user has a specific permission -->
+@can('manage users')
+    <p>This is visible to users with the 'manage users' permission.</p>
+@endcan
+
+```
+## Using Roles in Helper / Controller
+```
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+
+class SomeController extends Controller
+{
+    public function someMethod()
+    {
+        $user = Auth::user();
+
+        // Check if the user has the 'Admin' role
+        if ($user->hasRole('Admin')) {
+            // Do something for Admin users
+        }
+
+        // Check if the user has any of the given roles
+        if ($user->hasAnyRole(['Admin', 'Manager'])) {
+            // Do something for Admin or Manager users
+        }
+
+        // Check if the user has all of the given roles
+        if ($user->hasAllRoles(['Admin', 'Manager'])) {
+            // Do something for users with both Admin and Manager roles
+        }
+
+        // Check if the user has a specific permission
+        if ($user->can('manage users')) {
+            // Do something for users with the 'manage users' permission
+        }
+    }
+}
+
+```
+
+## Using In Routes Middleware
+
+```
+protected $routeMiddleware = [
+    // ...
+    'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+    'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
+    'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
+];
+
+
+Route::group(['middleware' => ['role:Admin']], function () {
+    Route::get('/admin', [AdminController::class, 'index']);
+});
+
+Route::group(['middleware' => ['permission:manage users']], function () {
+    Route::get('/manage-users', [UserController::class, 'index']);
+});
+
+Route::group(['middleware' => ['role_or_permission:Admin|manage users']], function () {
+    Route::get('/admin-or-manage-users', [AdminUserController::class, 'index']);
+});
+
+```
