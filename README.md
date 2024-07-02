@@ -364,3 +364,35 @@ Route::group(['middleware' => ['role_or_permission:Admin|manage users']], functi
 });
 
 ```
+
+## Example with Seeding
+
+```
+// Define roles and permissions for a CRM system
+$roles = [
+    'Admin' => ['manage users', 'manage customers', 'view customers', 'manage tickets', 'view reports', 'generate reports'],
+    'Manager' => ['manage customers', 'view customers', 'view reports', 'generate reports'],
+    'Sales Representative' => ['manage customers', 'view customers', 'view reports'],
+    'Support Agent' => ['manage tickets', 'view customers'],
+    'Viewer' => ['view customers', 'view reports'],
+];
+
+// Create permissions
+$permissions = array_unique(call_user_func_array('array_merge', array_values($roles)));
+foreach ($permissions as $permissionName) {
+    Permission::firstOrCreate(['name' => $permissionName]);
+}
+
+// Create roles and assign permissions
+foreach ($roles as $roleName => $rolePermissions) {
+    $role = Role::firstOrCreate(['name' => $roleName]);
+    $role->syncPermissions($rolePermissions);
+}
+
+// Seed users with random roles
+User::factory(100)->create()->each(function ($user) {
+    $role = Role::inRandomOrder()->first();
+    $user->assignRole($role);
+});
+
+```
